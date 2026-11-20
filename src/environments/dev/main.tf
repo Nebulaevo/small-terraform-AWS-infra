@@ -21,7 +21,7 @@ module "docker" {
 
   project_name          = var.project_name
   abs_compose_file_path = local.abs_compose_file_path
-  abs_env_file_path = local.abs_env_file_path
+  abs_env_file_path     = local.abs_env_file_path
 }
 
 locals {
@@ -32,5 +32,5 @@ locals {
   ssh_private_key = var.ssh_private_key != null ? var.ssh_private_key : file("${local.abs_project_root}/src/secrets/ssh-key")
 
   abs_compose_file_path = "${local.abs_project_root}/compose.yml"
-  abs_env_file_path = "${local.abs_project_root}/.env"
+  abs_env_file_path     = "${local.abs_project_root}/.env"
 }

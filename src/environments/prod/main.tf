@@ -21,17 +21,17 @@ module "docker" {
 
   project_name          = var.project_name
   abs_compose_file_path = local.abs_compose_file_path
-  abs_env_file_path = local.abs_env_file_path
+  abs_env_file_path     = local.abs_env_file_path
 }
 
 locals {
   abs_project_root = abspath("../../..")
-  
+
   # Using local key files in ./secrets folder if no ssh keys were provided
   ssh_public_key  = var.ssh_public_key != null ? var.ssh_public_key : file("${local.abs_project_root}/src/secrets/ssh-key.pub")
   ssh_private_key = var.ssh_private_key != null ? var.ssh_private_key : file("${local.abs_project_root}/src/secrets/ssh-key")
 
   abs_compose_file_path = "${local.abs_project_root}/compose.yml"
-  abs_env_file_path = "${local.abs_project_root}/.env"
+  abs_env_file_path     = "${local.abs_project_root}/.env"
 }
 
