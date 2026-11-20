@@ -2,8 +2,7 @@
 # REQUIRED
 
 variable "ssh_public_key" {
-  type    = string
-  default = null
+  type = string
 }
 
 variable "ssh_private_key" {
@@ -11,8 +10,6 @@ variable "ssh_private_key" {
 
   sensitive = true # prevents logging
   ephemeral = true # prevents storage (including in state)
-
-  default = null
 }
 
 # OPTIONAL

@@ -1,10 +1,13 @@
 
 # REQUIRED
 
+# EC2 instance user
 variable "remote_user" {
   type = string
 }
 
+# Network and subnetwork CIDR
+# (subnet must be a subnetwork of vpc)
 variable "cidr_blocks" {
   type = object({
     vpc : string
@@ -12,9 +15,13 @@ variable "cidr_blocks" {
   })
 }
 
+# Where lives the subnet
+variable "availability_zone" {
+  type = string
+}
+
 variable "ssh_public_key" {
-  type    = string
-  default = null
+  type = string
 }
 
 variable "ssh_private_key" {
@@ -22,12 +29,11 @@ variable "ssh_private_key" {
 
   sensitive = true # prevents logging
   ephemeral = true # prevents storage (including in state)
-
-  default = null
 }
 
 # OPTIONAL
 
+# dev / prod
 variable "env" {
   type    = string
   default = "dev"
@@ -38,11 +44,7 @@ variable "project_name" {
   default = "kalypso"
 }
 
-variable "availability_zone" {
-  type    = string
-  default = "eu-north-1a"
-}
-
+# EC2 instance type
 variable "instance_type" {
   type    = string
   default = "t3.micro"

@@ -1,3 +1,6 @@
+
+# Module output that can be used from any root module importing it
+# (Consumed by parent to forward IP to "docker" module to execute docker setup on instance)
 output "ubuntu_instance_ip" {
   value = aws_eip.ubuntu_instance.public_ip
 

@@ -1,17 +1,26 @@
-name: "Destroy Prod"
+name: "Destroy Infrastructure"
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment"
+        type: choice
+        required: true
+        default: dev
+        options:
+          - dev
+          - prod
 
 jobs:
   destroy:
-    name: "Destroy"
+    name: "Destroy (${{ inputs.environment }})"
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v6
 
-      - uses: aws-actions/configure-aws-credentials@v5
+      - uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-access-key-id: ${{ secrets.AWS_IAM_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_IAM_SECRET_ACCESS_KEY }}
@@ -42,11 +51,11 @@ jobs:
 
       - name: Init
         run: terraform init
-        working-directory: src/environments/prod
+        working-directory: src/environments/${{ inputs.environment }}
       
       - name: Destroy
         run: terraform destroy -auto-approve
-        working-directory: src/environments/prod
+        working-directory: src/environments/${{ inputs.environment }}
         env:
           TF_VAR_ssh_public_key: ${{ secrets.SSH_PUBLIC_KEY }}
           TF_VAR_ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
