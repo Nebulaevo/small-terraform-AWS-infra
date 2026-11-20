@@ -52,6 +52,21 @@ jobs:
       - uses: webfactory/ssh-agent@v0.9.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      
+      # Creating .env file with secrets for compose
+      - name: Create .env
+        run: |
+          cat > .env <<EOF
+          DB_ROOT_PASSWORD=$DB_ROOT_PASSWORD
+          DB_USER=$DB_USER
+          DB_USER_PASSWORD=$DB_USER_PASSWORD
+          DATABASE=$DATABASE
+          EOF
+        env:
+          DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_USER_PASSWORD: ${{ secrets.DB_USER_PASSWORD }}
+          DATABASE: ${{ secrets.DATABASE }}
 
       - name: Init
         run: terraform init

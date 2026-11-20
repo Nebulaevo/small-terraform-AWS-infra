@@ -1,6 +1,25 @@
+
+# REQUIRED
+
+variable "ssh_public_key" {
+  type      = string
+  default   = null
+}
+
+variable "ssh_private_key" {
+  type      = string
+
+  sensitive = true # prevents logging
+  ephemeral = true # prevents storage (including in state)
+
+  default   = null
+}
+
+# OPTIONAL
+
 variable "project_name" {
   type    = string
-  default = "kalypso"
+  default = "demo"
 }
 
 variable "env" {
@@ -21,18 +40,6 @@ variable "aws_availability_zone" {
 variable "remote_user" {
   type    = string
   default = "ubuntu"
-}
-
-variable "ssh_public_key" {
-  type      = string
-  default   = null
-  sensitive = true
-}
-
-variable "ssh_private_key" {
-  type      = string
-  default   = null
-  sensitive = true
 }
 
 variable "cidr_blocks" {

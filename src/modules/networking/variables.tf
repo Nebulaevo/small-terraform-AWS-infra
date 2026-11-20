@@ -1,16 +1,32 @@
-variable "ssh_public_key" {
-  type      = string
-  sensitive = true
-}
 
-variable "ssh_private_key" {
-  type      = string
-  sensitive = true
-}
+# REQUIRED
 
 variable "remote_user" {
   type = string
 }
+
+variable "cidr_blocks" {
+  type = object({
+    vpc : string
+    subnet : string
+  })
+}
+
+variable "ssh_public_key" {
+  type      = string
+  default   = null
+}
+
+variable "ssh_private_key" {
+  type      = string
+
+  sensitive = true # prevents logging
+  ephemeral = true # prevents storage (including in state)
+
+  default   = null
+}
+
+# OPTIONAL
 
 variable "env" {
   type    = string
@@ -30,11 +46,4 @@ variable "availability_zone" {
 variable "instance_type" {
   type    = string
   default = "t3.micro"
-}
-
-variable "cidr_blocks" {
-  type = object({
-    vpc : string
-    subnet : string
-  })
 }

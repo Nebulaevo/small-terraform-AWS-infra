@@ -8,17 +8,20 @@ services:
     
     environment:
       WORDPRESS_DB_HOST: "database:3306"
-      WORDPRESS_DB_USER: "wordpress"
-      WORDPRESS_DB_PASSWORD: "wordpress-user-password-123"
-      WORDPRESS_DB_NAME: "wordpress-db"
-    
+      WORDPRESS_DB_USER: ${DB_USER:? DB_USER is required}
+      WORDPRESS_DB_PASSWORD: ${DB_USER_PASSWORD:? DB_USER_PASSWORD is required}
+      WORDPRESS_DB_NAME: ${DATABASE:? DATABASE is required}
+
     ports:
       - "80:80"
+    volumes:
+      - wordpress_data:/var/www/html
     networks:
       - public_network
       - private_network
     
-    # Limiting RAM usage: because deployed on small AWS instance (1Go RAM)
+    # Limiting RAM usage: 
+    # because deployed on small AWS instance (1Go RAM)
     deploy:
       resources:
         limits:
@@ -27,12 +30,12 @@ services:
   database:
     image: mysql:9
     restart: unless-stopped
-
+    
     environment:
-      MYSQL_ROOT_PASSWORD: "root-user-password-123"
-      MYSQL_USER: "wordpress"
-      MYSQL_PASSWORD: "wordpress-user-password-123"
-      MYSQL_DATABASE: "wordpress-db"
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:? DB_ROOT_PASSWORD is required}
+      MYSQL_USER: ${DB_USER:? DB_USER is required}
+      MYSQL_PASSWORD: ${DB_USER_PASSWORD:? DB_USER_PASSWORD is required}
+      MYSQL_DATABASE: ${DATABASE:? DATABASE is required}
 
     ports:
       - "3306:3306"
@@ -48,7 +51,8 @@ services:
       retries: 3
       start_period: 30s
     
-    # Limiting RAM usage: because deployed on small AWS instance (1Go RAM)
+    # Limiting RAM usage: 
+    # because deployed on small AWS instance (1Go RAM)
     command:
       - --performance-schema=OFF
       - --innodb-buffer-pool-size=128M
@@ -58,6 +62,7 @@ services:
           memory: 512M
 
 volumes:
+  wordpress_data:
   db_data:
 
 networks:
