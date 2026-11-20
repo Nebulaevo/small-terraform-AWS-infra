@@ -19,22 +19,24 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-
+      - uses: hashicorp/setup-terraform@v4
       - uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-access-key-id: ${{ secrets.AWS_IAM_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_IAM_SECRET_ACCESS_KEY }}
           aws-region: "eu-north-1"
-      
-      - uses: hashicorp/setup-terraform@v4
 
       # Needed for terraform "kreuzwerker/docker" provider to use SSH
       # (because it uses system ssh creds, cannot give it special ones)
-      - uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Setup SSH key
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       
-      # Creating .env file with secrets for compose
+      # Creating .env file with secrets for docker compose
       - name: Create .env
         run: |
           cat > .env <<EOF

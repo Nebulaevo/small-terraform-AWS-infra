@@ -1,9 +1,4 @@
 .terraform/
 *.tfstate*
 
-# content of any ssh_keys folder
-**/secrets/*
-!**/secrets/.gitkeep
-
 .env
-!.env.example
