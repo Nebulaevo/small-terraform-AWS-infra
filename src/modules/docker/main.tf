@@ -11,8 +11,4 @@ resource "docker_compose" "app" {
   config_paths = [
     var.abs_compose_file_path,
   ]
-
-  env_files = [
-    var.abs_env_file_path,
-  ]
 }
